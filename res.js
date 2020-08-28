@@ -12,9 +12,9 @@ exports.success = (values, res) => {
 
 exports.error = (err, res) => {
     let data = {
-        code: 500,
+        code: err.code || 500,
         status: 'failed',
-        errors: err
+        errors: err.message || err
     }
     res.json(data)
     res.end()

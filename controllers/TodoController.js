@@ -18,6 +18,8 @@ exports.getTodos = (req, res) => {
 
 exports.addTodo = (req, res) => {
            
+    if (!req.body.title || !req.body.date) return response.error({ code: 422, message: "UNPROCESSABLE ENTITY" }, res)
+
     let body = {
         id: uuid.v4(),
         title: req.body.title,
@@ -36,6 +38,8 @@ exports.addTodo = (req, res) => {
 
 exports.updateTodo = (req, res) => {
            
+    if (!req.body.id || !req.body.title || !req.body.date) return response.error({ code: 422, message: "UNPROCESSABLE ENTITY" }, res)
+
     let body = [
         req.body.title,
         req.body.description,
@@ -52,7 +56,9 @@ exports.updateTodo = (req, res) => {
 }
 
 exports.deleteTodo = (req, res) => {    
-        
+            
+    if (!req.params.id) return response.error({ code: 404, message: "Id params not found!" }, res)    
+
     connection.query(`DELETE FROM todos WHERE id = "${req.params.id}"`, (err, results, fields) => {
         if (err) return response.error(err, res)
         response.success({ message: 'success' }, res)
